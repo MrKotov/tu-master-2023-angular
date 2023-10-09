@@ -5,9 +5,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { ButtonModule } from 'primeng/button';
+import { HomeComponent } from './core/components/home/home.component';
+import { HeaderComponent } from './core/components/header/header.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, HomeComponent, HeaderComponent],
   imports: [BrowserModule, AppRoutingModule, ButtonModule],
   providers: [],
   bootstrap: [AppComponent],
