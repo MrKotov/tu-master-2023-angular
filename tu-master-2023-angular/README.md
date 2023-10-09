@@ -1,5 +1,31 @@
 # TuMaster2023Angular
 
+Welcome to the Angular App! This project is built using Angular and manages dependencies using Yarn.
+
+## Prerequisites
+
+Before you get started, make sure you have the following prerequisites installed on your machine:
+
+1. **Node.js**: You can download and install Node.js from [nodejs.org](https://nodejs.org/).
+
+2. **Yarn**: Yarn is used for managing project dependencies. If you don't have Yarn installed, you can install it by following the instructions at [yarnpkg.com](https://yarnpkg.com/getting-started/install).
+
+## Getting Started
+
+Follow these steps to set up and run the Angular App:
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/MrKotov/tu-master-2023-angular.git
+
+2. **Install dependencies**
+
+    ```bash
+    yarn install
+    ```
+    
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.3.
 
 ## Development server
