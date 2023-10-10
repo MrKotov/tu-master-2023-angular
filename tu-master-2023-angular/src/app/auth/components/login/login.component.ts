@@ -64,6 +64,9 @@ export class LoginComponent {
 
       if (resp.loginSuccessfully) {
         this.router.navigate(['']);
+
+        this.setSession(resp);
+        this.authService.isLoggedIn.update((val) => true);
       } else {
         this.messageService.add({
           severity: 'error',
@@ -72,5 +75,13 @@ export class LoginComponent {
         });
       }
     });
+  }
+
+  private setSession(authResult: any) {
+    localStorage.setItem('id_token', authResult.username);
+    localStorage.setItem(
+      'expires_at',
+      new Date(new Date().getTime() + 5 * 60000).toUTCString()
+    );
   }
 }

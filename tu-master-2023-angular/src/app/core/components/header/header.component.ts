@@ -14,6 +14,9 @@ export class HeaderComponent {
     this.authService.logout().subscribe((resp) => {
       if (resp.loggedOut) {
         this.router.navigate(['']);
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('expires_at');
+        this.authService.isLoggedIn.update((val) => false);
       }
     });
   }

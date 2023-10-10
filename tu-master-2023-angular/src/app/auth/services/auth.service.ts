@@ -35,28 +35,14 @@ export class AuthService {
       loginSuccessfully: true,
     });
 
-    return fakeHttp.pipe(
-      delay(2000),
-      tap((item) => {
-        this.setSession(item);
-        this.isLoggedIn.update((val) => true);
-      })
-    );
+    return fakeHttp.pipe(delay(2000));
     //TODO make http request to get JWT token and save it in session
   }
 
   logout() {
     let fakeHttp = new BehaviorSubject({ loggedOut: true });
 
-    return fakeHttp.pipe(
-      delay(2000),
-      tap(() => {
-        localStorage.removeItem('id_token');
-        localStorage.removeItem('expires_at');
-        this.isLoggedIn.update((val) => false);
-      })
-    );
-
+    return fakeHttp.pipe(delay(1000));
     //TODO clear client session and as an advanced option make http request to logout on server
   }
 
@@ -67,15 +53,7 @@ export class AuthService {
     //TODO make http request to register user
   }
 
-  private setSession(authResult: any) {
-    localStorage.setItem('id_token', authResult.username);
-    localStorage.setItem(
-      'expires_at',
-      new Date(new Date().getTime() + 5 * 60000).toUTCString()
-    );
-  }
-
-  getExpiration() {
+  private getExpiration() {
     const expiration = localStorage.getItem('expires_at');
     if (expiration) {
       const expiresAt = new Date(expiration);
