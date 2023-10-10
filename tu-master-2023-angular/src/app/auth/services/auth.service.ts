@@ -18,10 +18,22 @@ export interface IRegisterForm {
   providedIn: 'root',
 })
 export class AuthService {
-  constructor() {}
+  isLoggedIn;
+
+  constructor() {
+    if (this.getExpiration()) {
+      this.isLoggedIn = signal(this.getExpiration() > new Date());
+    } else {
+      this.isLoggedIn = signal(false);
+    }
+  }
 
   login(username: string, password: string) {
-    let fakeHttp = new BehaviorSubject({ username, password, loginSuccessfully: false });
+    let fakeHttp = new BehaviorSubject({
+      username,
+      password,
+      loginSuccessfully: true,
+    });
 
     return fakeHttp.pipe(
       delay(2000),
@@ -33,8 +45,17 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
+    let fakeHttp = new BehaviorSubject({ loggedOut: true });
+
+    return fakeHttp.pipe(
+      delay(2000),
+      tap(() => {
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('expires_at');
+        this.isLoggedIn.update((val) => false);
+      })
+    );
+
     //TODO clear client session and as an advanced option make http request to logout on server
   }
 
@@ -47,16 +68,20 @@ export class AuthService {
 
   private setSession(authResult: any) {
     localStorage.setItem('id_token', authResult.username);
-    localStorage.setItem('expires_at', new Date().toISOString());
-  }
-
-  public isLoggedIn() {
-    return this.getExpiration() > new Date();
+    localStorage.setItem(
+      'expires_at',
+      new Date(new Date().getTime() + 5 * 60000).toUTCString()
+    );
+    this.isLoggedIn.update((val) => true);
   }
 
   getExpiration() {
-    const expiration = localStorage.getItem('expires_at') || '';
-    const expiresAt = new Date(expiration);
-    return expiresAt;
+    const expiration = localStorage.getItem('expires_at');
+    if (expiration) {
+      const expiresAt = new Date(expiration);
+      return expiresAt;
+    } else {
+      return false;
+    }
   }
 }

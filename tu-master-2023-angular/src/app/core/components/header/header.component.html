@@ -5,8 +5,10 @@
     <div class="spacer"></div>
     <div class="login-btns">
         <p-button label="Register" icon="pi pi-user-plus" class="shadow-5" styleClass="p-button-help"
-            [routerLink]="['register']"></p-button>
-        <p-button label="Login" icon="pi pi-user" class="shadow-5" styleClass="p-button-help"
-            [routerLink]="['login']"></p-button>
+            [routerLink]="['register']" *ngIf="!authService.isLoggedIn()"></p-button>
+        <p-button label="Login" icon="pi pi-user" class="shadow-5" styleClass="p-button-help" [routerLink]="['login']"
+            *ngIf="!authService.isLoggedIn()"></p-button>
+        <p-button label="Logout" icon="pi pi-user-minus" class="shadow-5" styleClass="p-button-help"
+            *ngIf="authService.isLoggedIn()" (onClick)="logout()"></p-button>
     </div>
 </div>
