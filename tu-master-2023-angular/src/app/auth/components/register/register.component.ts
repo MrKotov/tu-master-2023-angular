@@ -12,6 +12,8 @@ import {
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { MessagesModule } from 'primeng/messages';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -22,7 +24,9 @@ import { Router } from '@angular/router';
     InputTextModule,
     ReactiveFormsModule,
     FormsModule,
+    MessagesModule
   ],
+  providers: [MessageService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
@@ -30,7 +34,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
   isLoading: WritableSignal<boolean>;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router, private messageService: MessageService) {
     this.registerForm = new FormGroup({
       username: new FormControl('', [
         Validators.required,
@@ -54,6 +58,11 @@ export class RegisterComponent {
       this.registerForm.value.password != this.registerForm.value.repeatPassword
     ) {
       this.registerForm.controls['repeatPassword'].setErrors({ valid: false });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Passwords dont match!',
+      });
       return;
     }
 
