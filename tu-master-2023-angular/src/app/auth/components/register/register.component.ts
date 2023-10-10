@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Signal, WritableSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,6 +11,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -27,8 +28,9 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  isLoading: WritableSignal<boolean>;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     this.registerForm = new FormGroup({
       username: new FormControl('', [
         Validators.required,
@@ -43,11 +45,23 @@ export class RegisterComponent {
         Validators.minLength(6),
       ]),
     });
+
+    this.isLoading = signal(false);
   }
 
   submitForm() {
-    let { username, password } = this.registerForm.value;
+    if (
+      this.registerForm.value.password != this.registerForm.value.repeatPassword
+    ) {
+      this.registerForm.controls['repeatPassword'].setErrors({ valid: false });
+      return;
+    }
 
-    this.authService.login(username, password);
+    this.isLoading.set(true);
+
+    this.authService.register(this.registerForm.value).subscribe((resp) => {
+      this.isLoading.set(false);
+      this.router.navigate(['login']);
+    });
   }
 }

@@ -1,5 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import {
+  Injectable,
+  Signal,
+  WritableSignal,
+  effect,
+  signal,
+} from '@angular/core';
+import { BehaviorSubject, Observable, Subject, delay, tap } from 'rxjs';
 
 export interface IRegisterForm {
   username: string;
@@ -15,21 +21,42 @@ export class AuthService {
   constructor() {}
 
   login(username: string, password: string) {
-    console.log('login works', username, password);
+    let fakeHttp = new BehaviorSubject({ username, password, loginSuccessfully: false });
 
+    return fakeHttp.pipe(
+      delay(2000),
+      tap((item) => {
+        this.setSession(item);
+      })
+    );
     //TODO make http request to get JWT token and save it in session
   }
 
   logout() {
-    console.log('logout works');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
     //TODO clear client session and as an advanced option make http request to logout on server
   }
 
-  register(registerForm: IRegisterForm): boolean | Observable<any> {
-    if (registerForm.password != registerForm.repeatPass) return false;
+  register(registerForm: IRegisterForm): Observable<any> {
+    let fakeHttp = new BehaviorSubject(registerForm);
 
-    console.log('register works', registerForm);
-    return new Subject();
+    return fakeHttp.pipe(delay(2000));
     //TODO make http request to register user
+  }
+
+  private setSession(authResult: any) {
+    localStorage.setItem('id_token', authResult.username);
+    localStorage.setItem('expires_at', new Date().toISOString());
+  }
+
+  public isLoggedIn() {
+    return this.getExpiration() > new Date();
+  }
+
+  getExpiration() {
+    const expiration = localStorage.getItem('expires_at') || '';
+    const expiresAt = new Date(expiration);
+    return expiresAt;
   }
 }

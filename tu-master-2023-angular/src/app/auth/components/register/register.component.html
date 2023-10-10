@@ -14,12 +14,12 @@
             <input id="password" type="password" placeholder="Enter your password" pInputText class="w-full mb-3"
                 formControlName="password">
 
-            <label for="password" class="block text-900 font-medium mb-2">Repeat password</label>
-            <input id="password" type="password" placeholder="Repeat your password" pInputText class="w-full mb-3"
+            <label for="repassword" class="block text-900 font-medium mb-2">Repeat password</label>
+            <input id="repassword" type="password" placeholder="Repeat your password" pInputText class="w-full mb-3"
                 formControlName="repeatPassword">
 
             <button pButton pRipple label="Register" icon="pi pi-user" class="w-full" type="submit"
-                [disabled]="registerForm.invalid"></button>
+                [disabled]="registerForm.invalid" [loading]="isLoading()"></button>
         </div>
     </div>
 </form>

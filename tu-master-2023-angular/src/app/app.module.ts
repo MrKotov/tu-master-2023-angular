@@ -8,10 +8,11 @@ import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
 import { HomeComponent } from './core/components/home/home.component';
 import { HeaderComponent } from './core/components/header/header.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, HeaderComponent],
-  imports: [BrowserModule, AppRoutingModule, ButtonModule, StyleClassModule],
+  imports: [BrowserModule, AppRoutingModule, ButtonModule, StyleClassModule, BrowserAnimationsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
