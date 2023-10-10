@@ -39,6 +39,7 @@ export class AuthService {
       delay(2000),
       tap((item) => {
         this.setSession(item);
+        this.isLoggedIn.update((val) => true);
       })
     );
     //TODO make http request to get JWT token and save it in session
@@ -72,7 +73,6 @@ export class AuthService {
       'expires_at',
       new Date(new Date().getTime() + 5 * 60000).toUTCString()
     );
-    this.isLoggedIn.update((val) => true);
   }
 
   getExpiration() {
