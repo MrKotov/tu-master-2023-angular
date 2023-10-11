@@ -14,6 +14,8 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
+import { UserService } from '../../services/user.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -38,10 +40,11 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private userService: UserService
   ) {
     this.loginForm = new FormGroup({
-      username: new FormControl('', [
+      email: new FormControl('', [
         Validators.required,
         Validators.minLength(6),
       ]),
@@ -55,33 +58,51 @@ export class LoginComponent {
   }
 
   submitForm() {
-    let { username, password } = this.loginForm.value;
+    let { email, password } = this.loginForm.value;
 
     this.isLoading.set(true);
 
-    this.authService.login(username, password).subscribe((resp) => {
-      this.isLoading.set(false);
+    this.authService
+      .login(email, password)
+      .pipe(
+        finalize(() => {
+          this.isLoading.set(false);
+        })
+      )
+      .subscribe({
+        next: (userCred) => {
+          this.setSession(userCred);
+          this.authService.isLoggedIn.update((val) => true);
+          this.userService.loggedUser = userCred.user;
 
-      if (resp.loginSuccessfully) {
-        this.router.navigate(['']);
-
-        this.setSession(resp);
-        this.authService.isLoggedIn.update((val) => true);
-      } else {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: 'Username or password are wrong!',
-        });
-      }
-    });
+          this.router.navigate(['']);
+        },
+        error: (err) => {
+          if (err.message.indexOf('auth/invalid-login-credentials') >= 0) {
+            this.messageService.add({
+              severity: 'error',
+              detail: 'Invalid password!',
+            });
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              detail: 'User do not exist!',
+            });
+          }
+        },
+      });
   }
 
   private setSession(authResult: any) {
-    localStorage.setItem('id_token', authResult.username);
     localStorage.setItem(
-      'expires_at',
-      new Date(new Date().getTime() + 5 * 60000).toUTCString()
+      '_tokenResponse',
+      JSON.stringify(authResult._tokenResponse)
+    );
+    localStorage.setItem(
+      'expiresIn',
+      new Date(
+        new Date().getTime() + authResult._tokenResponse.expiresIn * 60000
+      ).toUTCString()
     );
   }
 }

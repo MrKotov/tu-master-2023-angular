@@ -11,13 +11,13 @@ export class HeaderComponent {
   constructor(public authService: AuthService, private router: Router) {}
 
   logout() {
-    this.authService.logout().subscribe((resp) => {
-      if (resp.loggedOut) {
+    this.authService.logout().subscribe({
+      next: (resp) => {
         this.router.navigate(['']);
-        localStorage.removeItem('id_token');
-        localStorage.removeItem('expires_at');
+        localStorage.removeItem('_tokenResponse');
+        localStorage.removeItem('expiresIn');
         this.authService.isLoggedIn.update((val) => false);
-      }
+      },
     });
   }
 }

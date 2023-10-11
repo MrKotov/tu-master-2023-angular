@@ -11,9 +11,21 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoAuthHomeComponent } from './core/components/no-auth-home/no-auth-home.component';
 
+
 @NgModule({
-  declarations: [AppComponent, HomeComponent, HeaderComponent, NoAuthHomeComponent],
-  imports: [BrowserModule, AppRoutingModule, ButtonModule, StyleClassModule, BrowserAnimationsModule],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    HeaderComponent,
+    NoAuthHomeComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ButtonModule,
+    StyleClassModule,
+    BrowserAnimationsModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

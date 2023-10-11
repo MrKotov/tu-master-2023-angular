@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
   title = 'tu-master-2023-angular';
+  constructor() {}
 }

@@ -5,7 +5,9 @@ import {
   effect,
   signal,
 } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, delay, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, delay, from, tap } from 'rxjs';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { DbService } from 'src/app/db/db.service';
 
 export interface IRegisterForm {
   username: string;
@@ -20,7 +22,7 @@ export interface IRegisterForm {
 export class AuthService {
   isLoggedIn;
 
-  constructor() {
+  constructor(private db: DbService) {
     if (this.getExpiration()) {
       this.isLoggedIn = signal(this.getExpiration() > new Date());
     } else {
@@ -28,22 +30,14 @@ export class AuthService {
     }
   }
 
-  login(username: string, password: string) {
-    let fakeHttp = new BehaviorSubject({
-      username,
-      password,
-      loginSuccessfully: true,
-    });
-
-    return fakeHttp.pipe(delay(2000));
-    //TODO make http request to get JWT token and save it in session
+  login(email: string, password: string) {
+    const auth = getAuth();
+    return from(signInWithEmailAndPassword(auth, email, password));
   }
 
   logout() {
-    let fakeHttp = new BehaviorSubject({ loggedOut: true });
-
-    return fakeHttp.pipe(delay(1000));
-    //TODO clear client session and as an advanced option make http request to logout on server
+    const auth = getAuth();
+    return from(signOut(auth));
   }
 
   register(registerForm: IRegisterForm): Observable<any> {
@@ -54,7 +48,7 @@ export class AuthService {
   }
 
   private getExpiration() {
-    const expiration = localStorage.getItem('expires_at');
+    const expiration = localStorage.getItem('expiresIn');
     if (expiration) {
       const expiresAt = new Date(expiration);
       return expiresAt;
