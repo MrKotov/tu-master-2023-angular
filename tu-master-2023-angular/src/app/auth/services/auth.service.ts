@@ -6,11 +6,10 @@ import {
   signal,
 } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, delay, from, tap } from 'rxjs';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { DbService } from 'src/app/db/db.service';
 
 export interface IRegisterForm {
-  username: string;
   email: string;
   password: string;
   repeatPass: string;
@@ -21,6 +20,7 @@ export interface IRegisterForm {
 })
 export class AuthService {
   isLoggedIn;
+  auth;
 
   constructor(private db: DbService) {
     if (this.getExpiration()) {
@@ -28,6 +28,8 @@ export class AuthService {
     } else {
       this.isLoggedIn = signal(false);
     }
+
+    this.auth = getAuth();
   }
 
   login(email: string, password: string) {
@@ -41,10 +43,9 @@ export class AuthService {
   }
 
   register(registerForm: IRegisterForm): Observable<any> {
-    let fakeHttp = new BehaviorSubject(registerForm);
-
-    return fakeHttp.pipe(delay(2000));
-    //TODO make http request to register user
+    let { email, password } = registerForm;
+    const auth = getAuth();
+    return from(createUserWithEmailAndPassword(auth, email, password));
   }
 
   private getExpiration() {
