@@ -5,14 +5,21 @@ import {
   effect,
   signal,
 } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, delay, from, tap } from 'rxjs';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { Observable, from, tap } from 'rxjs';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from 'firebase/auth';
 import { DbService } from 'src/app/db/db.service';
 
 export interface IRegisterForm {
   email: string;
   password: string;
   repeatPass: string;
+  fullName: string;
 }
 
 @Injectable({
@@ -43,9 +50,17 @@ export class AuthService {
   }
 
   register(registerForm: IRegisterForm): Observable<any> {
-    let { email, password } = registerForm;
+    let { email, password, fullName } = registerForm;
     const auth = getAuth();
-    return from(createUserWithEmailAndPassword(auth, email, password));
+    return from(createUserWithEmailAndPassword(auth, email, password)).pipe(
+      tap((resp) => {
+        let user = resp.user;
+
+        updateProfile(user, {
+          displayName: fullName,
+        });
+      })
+    );
   }
 
   private getExpiration() {
@@ -57,4 +72,7 @@ export class AuthService {
       return false;
     }
   }
+}
+function updateDisplayName() {
+  throw new Error('Function not implemented.');
 }

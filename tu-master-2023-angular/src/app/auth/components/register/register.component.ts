@@ -24,7 +24,7 @@ import { MessageService } from 'primeng/api';
     InputTextModule,
     ReactiveFormsModule,
     FormsModule,
-    MessagesModule
+    MessagesModule,
   ],
   providers: [MessageService],
   templateUrl: './register.component.html',
@@ -34,8 +34,13 @@ export class RegisterComponent {
   registerForm: FormGroup;
   isLoading: WritableSignal<boolean>;
 
-  constructor(private authService: AuthService, private router: Router, private messageService: MessageService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private messageService: MessageService
+  ) {
     this.registerForm = new FormGroup({
+      fullName: new FormControl('', [Validators.required]),
       email: new FormControl('', [
         Validators.required,
         Validators.minLength(6),

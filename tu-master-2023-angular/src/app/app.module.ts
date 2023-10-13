@@ -10,7 +10,7 @@ import { HomeComponent } from './core/components/home/home.component';
 import { HeaderComponent } from './core/components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoAuthHomeComponent } from './core/components/no-auth-home/no-auth-home.component';
-
+import { SplitButtonModule } from 'primeng/splitbutton';
 
 @NgModule({
   declarations: [
@@ -25,6 +25,7 @@ import { NoAuthHomeComponent } from './core/components/no-auth-home/no-auth-home
     ButtonModule,
     StyleClassModule,
     BrowserAnimationsModule,
+    SplitButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent],
