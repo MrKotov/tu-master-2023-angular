@@ -40,19 +40,16 @@ export class AuthService {
   }
 
   login(email: string, password: string) {
-    const auth = getAuth();
-    return from(signInWithEmailAndPassword(auth, email, password));
+    return from(signInWithEmailAndPassword(this.auth, email, password));
   }
 
   logout() {
-    const auth = getAuth();
-    return from(signOut(auth));
+    return from(signOut(this.auth));
   }
 
   register(registerForm: IRegisterForm): Observable<any> {
     let { email, password, fullName } = registerForm;
-    const auth = getAuth();
-    return from(createUserWithEmailAndPassword(auth, email, password)).pipe(
+    return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
       tap((resp) => {
         let user = resp.user;
 

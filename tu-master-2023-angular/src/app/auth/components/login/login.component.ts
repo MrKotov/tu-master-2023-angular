@@ -73,7 +73,6 @@ export class LoginComponent {
         next: (userCred) => {
           this.setSession(userCred);
           this.authService.isLoggedIn.update((val) => true);
-          this.userService.loggedUser = userCred.user;
 
           this.router.navigate(['']);
         },
