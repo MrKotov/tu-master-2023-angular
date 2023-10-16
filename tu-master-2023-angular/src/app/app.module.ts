@@ -11,6 +11,16 @@ import { HeaderComponent } from './core/components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NoAuthHomeComponent } from './core/components/no-auth-home/no-auth-home.component';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  let tokenObj = localStorage.getItem('_tokenResponse');
+  if (tokenObj) {
+    return JSON.parse(tokenObj).idToken;
+  }
+
+  return '';
+}
 
 @NgModule({
   declarations: [
@@ -25,7 +35,12 @@ import { SplitButtonModule } from 'primeng/splitbutton';
     ButtonModule,
     StyleClassModule,
     BrowserAnimationsModule,
-    SplitButtonModule
+    SplitButtonModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],
