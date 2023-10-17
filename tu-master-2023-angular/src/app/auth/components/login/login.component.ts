@@ -16,6 +16,7 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
 import { UserService } from '../../services/user.service';
 import { finalize } from 'rxjs/operators';
+import { EmailValidator } from 'src/app/core/validators/email.validator';
 
 @Component({
   selector: 'app-login',
@@ -40,13 +41,12 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private messageService: MessageService,
-    private userService: UserService
+    private messageService: MessageService
   ) {
     this.loginForm = new FormGroup({
       email: new FormControl('', [
         Validators.required,
-        Validators.minLength(6),
+        EmailValidator.validateByRegex(/[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]+/gm),
       ]),
       password: new FormControl('', [
         Validators.required,

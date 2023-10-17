@@ -14,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
+import { EmailValidator } from 'src/app/core/validators/email.validator';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -43,7 +44,7 @@ export class RegisterComponent {
       fullName: new FormControl('', [Validators.required]),
       email: new FormControl('', [
         Validators.required,
-        Validators.minLength(6),
+        EmailValidator.validateByRegex(/[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]+/gm),
       ]),
       password: new FormControl('', [
         Validators.required,

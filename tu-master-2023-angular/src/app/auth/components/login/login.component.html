@@ -8,13 +8,21 @@
         </div>
 
         <div>
-            <label for="email" class="block text-900 font-medium mb-2">Email</label>
-            <input id="email" type="text" placeholder="Email" pInputText class="w-full mb-3"
-                formControlName="email">
+            <div class="form-control mb-3">
+                <label for="email" class="block text-900 font-medium mb-2">Email</label>
+                <input id="email" type="text" placeholder="Email" pInputText class="w-full" formControlName="email"
+                    aria-describedby="error-message">
 
-            <label for="password" class="block text-900 font-medium mb-2">Password</label>
-            <input id="password" type="password" placeholder="Password" pInputText class="w-full mb-3"
-                formControlName="password">
+                <small id="error-message" style="color: #e24c4c;"
+                    *ngIf="loginForm.controls.email.errors?.validEmail && loginForm.controls.email.dirty">Invalid
+                    email address format</small>
+            </div>
+
+            <div class="form-control mb-3">
+                <label for="password" class="block text-900 font-medium mb-2">Password</label>
+                <input id="password" type="password" placeholder="Password" pInputText class="w-full"
+                    formControlName="password">
+            </div>
 
             <button pButton pRipple label="Sign In" icon="pi pi-user" class="w-full" type="submit"
                 [disabled]="loginForm.invalid" [loading]="isLoading()"></button>
