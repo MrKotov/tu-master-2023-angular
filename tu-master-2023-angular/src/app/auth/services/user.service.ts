@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
-import { User, getAuth, onAuthStateChanged } from 'firebase/auth';
+import {
+  User,
+  getAuth,
+  onAuthStateChanged,
+  updateProfile,
+} from 'firebase/auth';
 import { AuthService } from './auth.service';
+import { from } from 'rxjs';
+
+export interface IUserProfile {
+  displayName?: string;
+  photoUrl?: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -19,5 +30,13 @@ export class UserService {
     onAuthStateChanged(authService.auth, (user) => {
       this.loggedUser = user;
     });
+  }
+
+  updateUser(fieldsToUpdate: IUserProfile) {
+    if (this.loggedUser) {
+      return from(updateProfile(this.loggedUser, fieldsToUpdate));
+    }
+
+    return null;
   }
 }

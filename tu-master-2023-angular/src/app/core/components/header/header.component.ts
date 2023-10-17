@@ -21,7 +21,7 @@ export class HeaderComponent {
         label: 'Update profile',
         icon: 'pi pi-id-card',
         command: () => {
-          console.log('update');
+          this.router.navigate(['/profile']);
         },
       },
       { separator: true },

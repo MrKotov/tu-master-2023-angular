@@ -5,6 +5,7 @@ import { RegisterComponent } from './auth/components/register/register.component
 import { HomeComponent } from './core/components/home/home.component';
 import { authGuard } from './core/guards/auth.guard';
 import { NoAuthHomeComponent } from './core/components/no-auth-home/no-auth-home.component';
+import { EditUserInfoComponent } from './features/components/edit-user-info/edit-user-info.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,11 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'profile',
+    component: EditUserInfoComponent,
     canActivate: [authGuard],
   },
   {
