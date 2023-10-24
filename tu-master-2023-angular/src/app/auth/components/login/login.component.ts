@@ -18,6 +18,10 @@ import { UserService } from '../../services/user.service';
 import { finalize } from 'rxjs/operators';
 import { EmailValidator } from 'src/app/core/validators/email.validator';
 
+export const emailValidatorFn = EmailValidator.validateByRegex(
+  /[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]+/gm
+);
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -44,10 +48,7 @@ export class LoginComponent {
     private messageService: MessageService
   ) {
     this.loginForm = new FormGroup({
-      email: new FormControl('', [
-        Validators.required,
-        EmailValidator.validateByRegex(/[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]+/gm),
-      ]),
+      email: new FormControl('', [Validators.required, emailValidatorFn]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(6),

@@ -1,11 +1,13 @@
-import { FormControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class EmailValidator {
-  static validateByRegex(
-    regexExp: RegExp
-  ): (control: FormControl) => { [key: string]: boolean } | null {
-    return function (control: FormControl): { [key: string]: boolean } | null {
-      if (regexExp.test(control.value)) return null;
+  static validateByRegex(regexExp?: RegExp): ValidatorFn {
+    return function (control: AbstractControl): ValidationErrors | null {
+      let emailMatch = control.value.match(regexExp);
+
+      if (emailMatch) {
+        return null;
+      }
 
       return {
         validEmail: true,
