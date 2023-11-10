@@ -13,9 +13,9 @@
                 <input id="email" type="text" placeholder="Email" pInputText class="w-full" formControlName="email"
                     aria-describedby="error-message">
 
-                <small id="error-message" style="color: #e24c4c;"
-                    *ngIf="loginForm.controls.email.errors?.validEmail && loginForm.controls.email.dirty">Invalid
-                    email address format</small>
+                @if (loginForm.controls.email.errors?.validEmail && loginForm.controls.email.dirty) {
+                <small id="error-message" style="color: #e24c4c;">Invalid email address format</small>
+                }
             </div>
 
             <div class="form-control mb-3">
